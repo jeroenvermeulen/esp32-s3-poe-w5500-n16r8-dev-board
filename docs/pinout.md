@@ -1,8 +1,13 @@
 # Pinout
 
 This pinout is taken from the [vendor schematics](../schematics/). The header pin numbers are the
-schematic connector numbers. Check them against the silkscreen on your board before you wire
-anything.
+schematic connector numbers. The signal labels on the J1/J2 silkscreen in the
+[board photo](images/board-top.jpg) match the schematic: J1 is on the left edge and J2 on the
+right edge. The [bottom silkscreen](images/board-bottom.jpg) prints the on-board functions next to
+the pins, and they match this table: `ETH_CS/MOSI/CLK/MISO/INT/RST` on GPIO10–15, `USB-(D-)` and
+`USB-(D+)` on GPIO19/20, `SD_D0–D3/CLK/CMD` on GPIO33–38, JTAG `MTCK/MTDO/MTDI/MTMS` on GPIO39–42,
+and `U0TXD/U0RXD` on GPIO43/44. The camera pins aren't labelled. In the bottom view, J1 and J2
+appear mirrored (J2 on the left).
 
 ## GPIO map
 

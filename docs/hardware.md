@@ -7,6 +7,7 @@ whether it was **verified** on a real board or only **read from the schematic**.
 
 | Block | Part | Source |
 |-------|------|--------|
+| Board revision | V1.2 (bottom silkscreen); PCB marking `634822A_P23_250515` | board photos |
 | MCU | ESP32-S3 (QFN56) rev v0.2, bare chip (not a WROOM module) | verified with `esptool chip-id` |
 | Flash | Winbond W25Q128, 16 MB, quad SPI, 3.3 V | verified with `esptool flash-id` (manufacturer `ef`, device `4018`) |
 | PSRAM | ESP-PSRAM64H, 8 MB, **quad SPI (QSPI), not octal** | schematic |
@@ -18,7 +19,7 @@ whether it was **verified** on a real board or only **read from the schematic**.
 | Native USB | ESP32-S3 USB-Serial/JTAG on a second USB-C port, plus a USB-A host port | verified (USB-C), schematic (USB-A) |
 | Storage | microSD slot, 4-bit SDMMC | schematic |
 | Camera | 18-pin OV2640 connector, 8-bit DVP | schematic |
-| Antenna | PCB/ceramic antenna plus IPEX connector | schematic |
+| Antenna | SMA connector (ANT1). An external 2.4 GHz antenna is required. | board photo |
 | Buttons | BOOT (GPIO0), RESET (EN), latching power switch | schematic, power switch verified |
 | LEDs | LED1 (power, on 3.3 V), RJ45 link/activity LEDs | verified (LED1) |
 
@@ -221,5 +222,6 @@ TX/RX center taps ─ D3 ┘    │
 ## Antenna
 
 The RF output (`LNA_IN`) goes through a π matching network (R1 0 Ω in series, C1/C2 3 pF to GND)
-to the antenna section, which the schematic labels `ANT1` / `IPX-4`. Check your board to see
-whether it has a PCB antenna, an IPEX (u.FL) connector, or both.
+to the antenna connector, which the schematic labels `ANT1` / `IPX-4`. The
+[board photo](images/board-top.jpg) shows an **SMA connector** here, and there is no PCB
+antenna. Wi-Fi and Bluetooth need an external 2.4 GHz antenna.
