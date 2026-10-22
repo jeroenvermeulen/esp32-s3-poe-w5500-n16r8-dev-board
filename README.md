@@ -207,7 +207,7 @@ macOS install (Apple silicon or Intel). The board's native USB port needs no dri
 
 ## Contributing
 
-Corrections, photos of the board (front and back), test results with different PoE switches, and
+Corrections, test results with different PoE switches, and
 new examples are welcome. Please open an issue or a pull request.
 
 ## License
