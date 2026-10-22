@@ -50,7 +50,9 @@ Install **esp32 by Espressif Systems** version 3.x in the Boards Manager. Then s
 | Upload Mode | UART0 / Hardware CDC | |
 
 If you upload through the CH340K port instead, set **USB CDC On Boot = Disabled**. `Serial` then
-goes to UART0 (GPIO43/44), which is connected to the CH340K.
+goes to UART0 (GPIO43/44), which is connected to the CH340K. The
+[`usb_keyboard`](../examples/usb_keyboard) example needs this, because it uses the native USB lines
+for the USB-A port ([details](hardware.md#using-the-usb-a-port-as-usb-host)).
 
 ### arduino-cli
 

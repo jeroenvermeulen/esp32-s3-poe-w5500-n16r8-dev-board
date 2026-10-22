@@ -16,7 +16,7 @@ whether it was **verified** on a real board or only **read from the schematic**.
 | PoE | 3 bridge rectifiers, simple PD front end, TI TPS54360 buck to 5 V | schematic |
 | 3.3 V regulator | AMS1117-3.3 type LDO | schematic |
 | USB-UART | WCH CH340K (`1a86:7522`) on its own USB-C port, with auto-program | verified (needs the WCH driver on macOS) |
-| Native USB | ESP32-S3 USB-Serial/JTAG on a second USB-C port, plus a USB-A host port | verified (USB-C), schematic (USB-A) |
+| Native USB | ESP32-S3 USB-Serial/JTAG on a second USB-C port, plus a USB-A host port | verified |
 | Storage | microSD slot, 4-bit SDMMC | schematic |
 | Camera | 18-pin OV2640 connector, 8-bit DVP | schematic |
 | Antenna | SMA connector (ANT1). An external 2.4 GHz antenna is required. | board photo |
@@ -79,6 +79,26 @@ and does not check CC, so it always supplies 5 V.
 
 J4 (ESP-USB) and J5 (USB-A female) are wired in parallel to GPIO19/20. Don't connect a computer to J4 and a device to J5
 at the same time. In host mode J5 gets its VBUS from the switched `+5V` rail.
+
+### Using the USB-A port as USB host
+
+**(verified)** with a USB keyboard on J5 and the computer on J3.
+
+To use J5 (for example with [`examples/usb_keyboard`](../examples/usb_keyboard)), connect the
+computer to the **CH340K port (J3)**, and leave J4 unplugged. Then flash and read the serial output
+through the CH340K:
+
+- **Serial output can't go over J4 in host mode.** The ESP32-S3 has one internal USB PHY on
+  GPIO19/20. It is connected to either the USB-Serial/JTAG controller (the `usbmodem` port on J4) or
+  the USB-OTG controller. `usb_host_install()` switches it to OTG, and the J4 serial port goes away.
+- **J4 and J5 are one bus.** With a computer on J4 and a device on J5, two hosts drive the same
+  D+/D- lines. The computer may even enumerate the device on J5 itself.
+- **Flashing over the CH340K keeps working.** Its auto-program circuit drives EN and GPIO0 directly.
+  On J4, once a sketch has switched the PHY to host mode, the automatic reset into download mode
+  stops working, and you need BOOT + RESET for every upload.
+- **One cable powers everything.** J3's VBUS goes through the power switch to `+5V`, which also
+  powers J5. The USB device on J5 shares the 500 mA from the computer's port with the board.
+- **Arduino setting:** set **USB CDC On Boot = Disabled**, so `Serial` goes to UART0.
 
 ### CH340K port (J3)
 

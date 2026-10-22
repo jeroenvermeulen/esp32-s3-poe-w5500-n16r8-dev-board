@@ -95,12 +95,13 @@ The full pinout, header layout and copy-paste `#define`s are in [docs/pinout.md]
 
 | Example | Description | Tested on hardware |
 |---------|-------------|:------------------:|
-| [chip_info](examples/chip_info) | Prints chip, flash and PSRAM info. Use it to check your board settings. | no |
-| [ethernet_dhcp](examples/ethernet_dhcp) | W5500 with DHCP, then an HTTP GET | no |
-| [ethernet_webserver](examples/ethernet_webserver) | Status page over Ethernet with mDNS | no |
-| [wifi_station](examples/wifi_station) | Wi-Fi scan (antenna check), then connects and does an HTTP GET | no |
-| [sd_card](examples/sd_card) | Mounts the microSD in 4-bit SDMMC mode, lists files, reads and writes | no |
-| [camera_ethernet_stream](examples/camera_ethernet_stream) | OV2640 MJPEG stream over Ethernet | no |
+| [chip_info](examples/chip_info) | Prints chip, flash and PSRAM info. Use it to check your board settings. | yes |
+| [ethernet_dhcp](examples/ethernet_dhcp) | W5500 with DHCP, then an HTTP GET | yes |
+| [ethernet_webserver](examples/ethernet_webserver) | Status page over Ethernet with mDNS | yes |
+| [wifi_station](examples/wifi_station) | Wi-Fi scan (antenna check), then connects and does an HTTP GET | yes |
+| [sd_card](examples/sd_card) | Mounts the microSD in 4-bit SDMMC mode, lists files, reads and writes | yes |
+| [camera_ethernet_stream](examples/camera_ethernet_stream) | [OV2640](https://aliexpress.com/item/1005007015642403.html) MJPEG stream over Ethernet | no |
+| [usb_keyboard](examples/usb_keyboard) | USB keyboard on the USB-A port, keys printed on the CH340K port. Needs other settings, [see here](docs/hardware.md#using-the-usb-a-port-as-usb-host). | yes |
 
 All examples compile with Arduino-ESP32 3.3.x. Run [`scripts/build-examples.sh`](scripts/build-examples.sh)
 to build them all.

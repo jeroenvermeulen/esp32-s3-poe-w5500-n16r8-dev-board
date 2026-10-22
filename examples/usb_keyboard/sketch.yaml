@@ -1,0 +1,2 @@
+# Serial goes to UART0 (CH340K port), because native USB runs in host mode
+default_fqbn: esp32:esp32:esp32s3:CDCOnBoot=default,USBMode=hwcdc,FlashSize=16M,FlashMode=qio,PSRAM=enabled,PartitionScheme=app3M_fat9M_16MB

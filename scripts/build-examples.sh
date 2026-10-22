@@ -8,8 +8,17 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 for sketch in "$ROOT"/examples/*/; do
   echo "==> $(basename "$sketch")"
-  arduino-cli compile --fqbn "$FQBN" "$sketch"
+  # A sketch.yaml with default_fqbn overrides the board settings (usb_keyboard)
+  fqbn="$FQBN"
+  if [[ -f "$sketch/sketch.yaml" ]]; then
+    fqbn="$(sed -n 's/^default_fqbn: *//p' "$sketch/sketch.yaml")"
+  fi
+  arduino-cli compile --fqbn "$fqbn" "$sketch"
   if [[ $# -ge 1 ]]; then
-    arduino-cli upload --fqbn "$FQBN" -p "$1" "$sketch"
+    if [[ "$fqbn" == "$FQBN" ]]; then
+      arduino-cli upload --fqbn "$fqbn" -p "$1" "$sketch"
+    else
+      echo "    Not uploaded: it needs other board settings. Upload it on its own, see the sketch header."
+    fi
   fi
 done
