@@ -61,6 +61,11 @@ void setup() {
   delay(2000);
 
   Network.onEvent(onEvent);
+  // Force 10 Mbit half duplex: some boards can't hold a 100 Mbit link
+  // (see docs/getting-started.md#ethernet-link-keeps-going-up-and-down)
+  ETH.setAutoNegotiation(false);
+  ETH.setLinkSpeed(10);
+  ETH.setFullDuplex(false);
   ETH.begin(ETH_PHY_TYPE, ETH_PHY_ADDR, ETH_PHY_CS, ETH_PHY_IRQ, ETH_PHY_RST,
             ETH_PHY_SPI_HOST, ETH_PHY_SPI_SCK, ETH_PHY_SPI_MISO, ETH_PHY_SPI_MOSI);
 

@@ -63,7 +63,7 @@ There are three USB connectors.
 |-----------|------------------|------|------------|
 | J3, USB-C, "CH340K" | CH340K USB-UART → UART0 (GPIO43/44) and auto-program (EN/GPIO0) | VBUS net | Serial console, flashing with `esptool` over UART |
 | J4, USB-C, "ESP-USB" | ESP32-S3 native USB (GPIO19/20) | VBUS net | Flashing and serial over USB-Serial/JTAG, JTAG debugging, TinyUSB |
-| J5, USB-A | ESP32-S3 native USB (GPIO19/20), **same lines as J4** | `+5V` (switched) | USB host (OTG) for keyboards, flash drives and similar |
+| J5, USB-A female | ESP32-S3 native USB (GPIO19/20), **same lines as J4** | `+5V` (switched) | USB host (OTG) for keyboards, flash drives and similar |
 
 ### USB-C to USB-C cables don't work
 
@@ -151,6 +151,9 @@ rarely need this. The ESP-USB port (J4) resets the chip into download mode by it
   your library has no reset-pin setting, call `pinMode(15, OUTPUT); digitalWrite(15, HIGH);` and
   wait about 50 ms before you start the W5500.
 - `PMODE0..2` are tied high, so the PHY uses auto-negotiation with all modes enabled.
+- **100 Mbit isn't reliable on at least one board (verified).** The link drops every few seconds,
+  while forced 10 Mbit is stable. The examples force 10 Mbit half duplex. See
+  [getting-started.md](getting-started.md#ethernet-link-keeps-going-up-and-down).
 - The 25 MHz crystal (X2) has 18 pF load capacitors and a 1 MΩ resistor across it.
 - `EXRES1` has the 12.4 kΩ bias resistor (R33).
 - `ACTLED` and `LINKLED` drive the LEDs built into the RJ45 jack, through 82 Ω resistors.

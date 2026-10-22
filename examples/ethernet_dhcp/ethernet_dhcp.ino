@@ -3,6 +3,7 @@
 
 #include <ETH.h>
 #include <NetworkClient.h>
+#include <esp_system.h>
 
 // W5500 wiring on this board (see docs/pinout.md)
 #define ETH_PHY_TYPE     ETH_PHY_W5500
@@ -16,31 +17,54 @@
 #define ETH_PHY_SPI_MOSI 11
 
 static bool ethConnected = false;
+static uint32_t linkUpCount = 0;
+static uint32_t linkUpSince = 0;
+
+// Prefixes each log line with the uptime, so link drops can be lined up with reboots
+#define LOG(fmt, ...) Serial.printf("[%8.3f] " fmt "\n", millis() / 1000.0, ##__VA_ARGS__)
+
+const char *resetReasonName(esp_reset_reason_t reason) {
+  switch (reason) {
+    case ESP_RST_POWERON:  return "power-on";
+    case ESP_RST_EXT:      return "external pin";
+    case ESP_RST_SW:       return "software";
+    case ESP_RST_PANIC:    return "panic";
+    case ESP_RST_INT_WDT:  return "interrupt watchdog";
+    case ESP_RST_TASK_WDT: return "task watchdog";
+    case ESP_RST_WDT:      return "other watchdog";
+    case ESP_RST_BROWNOUT: return "brownout";
+    case ESP_RST_USB:      return "USB";
+    default:               return "unknown";
+  }
+}
 
 void onEvent(arduino_event_id_t event, arduino_event_info_t info) {
   switch (event) {
     case ARDUINO_EVENT_ETH_START:
-      Serial.println("ETH started");
+      LOG("ETH started");
       ETH.setHostname("esp32-s3-poe");
       break;
     case ARDUINO_EVENT_ETH_CONNECTED:
-      Serial.println("ETH link up");
+      linkUpCount++;
+      linkUpSince = millis();
+      LOG("ETH link up (#%lu): %u Mbit, %s duplex", linkUpCount, ETH.linkSpeed(),
+          ETH.fullDuplex() ? "full" : "half");
       break;
     case ARDUINO_EVENT_ETH_GOT_IP:
-      Serial.printf("ETH got IP: %s\n", ETH.localIP().toString().c_str());
+      LOG("ETH got IP: %s", ETH.localIP().toString().c_str());
       Serial.println(ETH);
       ethConnected = true;
       break;
     case ARDUINO_EVENT_ETH_LOST_IP:
-      Serial.println("ETH lost IP");
+      LOG("ETH lost IP");
       ethConnected = false;
       break;
     case ARDUINO_EVENT_ETH_DISCONNECTED:
-      Serial.println("ETH link down");
+      LOG("ETH link down after %.1f s up", (millis() - linkUpSince) / 1000.0);
       ethConnected = false;
       break;
     case ARDUINO_EVENT_ETH_STOP:
-      Serial.println("ETH stopped");
+      LOG("ETH stopped");
       ethConnected = false;
       break;
     default:
@@ -67,8 +91,16 @@ void httpGet(const char *host, uint16_t port) {
 void setup() {
   Serial.begin(115200);
   delay(2000);
+  LOG("Boot, reset reason: %s", resetReasonName(esp_reset_reason()));
 
   Network.onEvent(onEvent);
+  // On some boards the W5500 cannot hold a 100 Mbit link: auto-negotiation picks
+  // 100 Mbit and the link drops every few seconds. Forcing 10 Mbit makes it stable.
+  // Use half duplex: an auto-negotiating partner falls back to half duplex when
+  // this side does not negotiate, so forced full duplex would cause a mismatch.
+  ETH.setAutoNegotiation(false);
+  ETH.setLinkSpeed(10);
+  ETH.setFullDuplex(false);
   if (!ETH.begin(ETH_PHY_TYPE, ETH_PHY_ADDR, ETH_PHY_CS, ETH_PHY_IRQ, ETH_PHY_RST,
                  ETH_PHY_SPI_HOST, ETH_PHY_SPI_SCK, ETH_PHY_SPI_MISO, ETH_PHY_SPI_MOSI)) {
     Serial.println("ETH.begin() failed - check the W5500 wiring");

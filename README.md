@@ -69,7 +69,10 @@ translate as follows:
    ([details](docs/getting-started.md#the-ch340k-port-doesnt-show-up)).
 4. **Set PSRAM to QSPI, not OPI.** This differs from most N16R8 modules.
 5. **GPIO15 must be high for Ethernet to work.** The W5500 reset line has a pull-down.
-6. **Don't use PoE and USB at the same time** unless you know the risk. The PoE supply isn't
+6. **Ethernet may only be stable at 10 Mbit.** On at least one board the 100 Mbit link drops
+   every few seconds, so the examples force 10 Mbit half duplex
+   ([details](docs/getting-started.md#ethernet-link-keeps-going-up-and-down)).
+7. **Don't use PoE and USB at the same time** unless you know the risk. The PoE supply isn't
    isolated, and its 5 V output is connected to the USB VBUS pins.
 
 ## Pin summary
@@ -95,6 +98,7 @@ The full pinout, header layout and copy-paste `#define`s are in [docs/pinout.md]
 | [chip_info](examples/chip_info) | Prints chip, flash and PSRAM info. Use it to check your board settings. | no |
 | [ethernet_dhcp](examples/ethernet_dhcp) | W5500 with DHCP, then an HTTP GET | no |
 | [ethernet_webserver](examples/ethernet_webserver) | Status page over Ethernet with mDNS | no |
+| [wifi_station](examples/wifi_station) | Wi-Fi scan (antenna check), then connects and does an HTTP GET | no |
 | [sd_card](examples/sd_card) | Mounts the microSD in 4-bit SDMMC mode, lists files, reads and writes | no |
 | [camera_ethernet_stream](examples/camera_ethernet_stream) | OV2640 MJPEG stream over Ethernet | no |
 
@@ -111,7 +115,7 @@ to build them all.
 
 ## Quick start (Arduino IDE)
 
-Install **esp32 by Espressif Systems** 3.x and select **ESP32S3 Dev Module** with these settings:
+Add the [ESP32 by Espressif Systems](https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html) board URL and select the **ESP32S3 Dev Module** with these settings:
 
 - USB CDC On Boot: **Enabled**
 - Flash Size: **16MB**

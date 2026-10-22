@@ -173,3 +173,35 @@ output only appears on this port with **USB CDC On Boot = Disabled**.
 - GPIO15 must be driven **high**. The board has a pull-down that holds the W5500 in reset. The
   examples pass `ETH_RST = 15` to `ETH.begin()`, which handles this.
 - Check that the RJ45 link LED is on.
+
+### Ethernet link keeps going up and down
+
+The link comes up at 100 Mbit full duplex, drops after a second or two, and comes back, over and
+over. The RJ45 LEDs go off with it, and DHCP never gets an address.
+
+On at least one board (**verified**) the W5500 can't hold a 100 Mbit link. This happened with
+different cables and with both a switch and a Mac on the other end, so it isn't the network.
+Polling the W5500's `PHYCFGR` register directly, without the Ethernet driver, showed:
+
+| PHY mode | Result |
+|----------|--------|
+| Auto-negotiation (picks 100 Mbit full) | link drops about every 2.5 s |
+| Forced 100 Mbit, full or half duplex | no link |
+| Forced 10 Mbit, full or half duplex | stable link |
+
+The cause is probably marginal analog hardware around the PHY (crystal, `+3.3A` supply or
+magnetics). It hasn't been tracked down.
+
+The workaround is to force 10 Mbit half duplex before `ETH.begin()`. The examples do this:
+
+```cpp
+ETH.setAutoNegotiation(false);
+ETH.setLinkSpeed(10);
+ETH.setFullDuplex(false);
+```
+
+Use half duplex, not full. When one side doesn't auto-negotiate, the other side falls back to half
+duplex, so forcing full duplex causes a duplex mismatch. The cost is throughput: at most about
+1 MB/s, which limits the camera stream's frame rate.
+
+If your board holds a 100 Mbit link, remove these three lines to get the full speed.
