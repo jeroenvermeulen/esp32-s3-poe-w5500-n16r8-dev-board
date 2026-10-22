@@ -118,7 +118,7 @@ to build them all.
 
 Add the [ESP32 by Espressif Systems](https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html) board URL and select the **ESP32S3 Dev Module** with these settings:
 
-- USB CDC On Boot: **Enabled**
+- USB CDC On Boot: **Enabled** (Disable when using the CH340X port)
 - Flash Size: **16MB**
 - PSRAM: **QSPI PSRAM**
 - Partition Scheme: 16M Flash (3MB APP/9.9MB FATFS)
