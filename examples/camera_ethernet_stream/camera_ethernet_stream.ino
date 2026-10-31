@@ -1,10 +1,11 @@
-// Streams the OV2640 camera as MJPEG over the on-board W5500 Ethernet.
+// Streams the OV2640 camera as MJPEG over the on-board W5500 Ethernet (no wifi)
 //   http://<ip>/         -> page with the live stream
 //   http://<ip>/jpg      -> single snapshot
 //   http://<ip>/stream   -> raw MJPEG stream
 //
-// UNTESTED: the camera connector has no XCLK pin, so this only works with a camera
-// module that has its own oscillator. See docs/hardware.md#camera-cam1.
+// Tested with this OV2640 module: https://aliexpress.com/item/1005007015642403.html
+// The camera connector has no XCLK pin, so this only works with a camera module that
+// has its own oscillator. See docs/hardware.md#camera-cam1.
 
 #include <ETH.h>
 #include <WebServer.h>

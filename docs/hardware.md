@@ -18,7 +18,7 @@ whether it was **verified** on a real board or only **read from the schematic**.
 | USB-UART | WCH CH340K (`1a86:7522`) on its own USB-C port, with auto-program | verified (needs the WCH driver on macOS) |
 | Native USB | ESP32-S3 USB-Serial/JTAG on a second USB-C port, plus a USB-A host port | verified |
 | Storage | microSD slot, 4-bit SDMMC | schematic |
-| Camera | 18-pin OV2640 connector, 8-bit DVP | schematic |
+| Camera | 18-pin OV2640 connector, 8-bit DVP | verified |
 | Antenna | SMA connector (ANT1). An external 2.4 GHz antenna is required. | board photo |
 | Buttons | BOOT (GPIO0), RESET (EN), latching power switch | schematic, power switch verified |
 | LEDs | LED1 (power, on 3.3 V), RJ45 link/activity LEDs | verified (LED1) |
@@ -237,6 +237,9 @@ TX/RX center taps ─ D3 ┘    │
 - **The connector has no XCLK pin.** The camera module must have its own oscillator. A "bare"
   OV2640 module that expects XCLK from the MCU won't work without a bodge wire from a free GPIO
   (for example GPIO47) to the module's XCLK pin.
+- **Verified** with [this OV2640 module](https://aliexpress.com/item/1005007015642403.html), which
+  has its own oscillator. The [camera_ethernet_stream](../examples/camera_ethernet_stream) example
+  works with it.
 - `PWDN` is tied to GND, so the camera is always powered.
 - `RST` is wired to GPIO0, the BOOT pin. GPIO0 has a pull-up, so the camera runs normally. Pressing
   BOOT also resets the camera.

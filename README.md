@@ -52,7 +52,7 @@ translate as follows:
 | PoE | Mode A + Mode B, discrete front end (Class 0), TPS54360 buck converter, **not isolated** |
 | USB | USB-C "ESP-USB" (native USB-Serial/JTAG), USB-C "CH340K" (UART0), USB-A (USB host) |
 | Storage | microSD, 4-bit SDMMC |
-| Camera | 18-pin OV2640 connector (DVP, no XCLK) |
+| Camera | 18-pin OV2640 connector (DVP, no XCLK), [this module](https://aliexpress.com/item/1005007015642403.html) works |
 | Controls | BOOT, RESET, latching power switch |
 | Headers | 2× 30-pin (J1, J2) |
 | Antenna | SMA connector, external 2.4 GHz antenna required |
@@ -100,7 +100,7 @@ The full pinout, header layout and copy-paste `#define`s are in [docs/pinout.md]
 | [ethernet_webserver](examples/ethernet_webserver) | Status page over Ethernet with mDNS | yes |
 | [wifi_station](examples/wifi_station) | Wi-Fi scan (antenna check), then connects and does an HTTP GET | yes |
 | [sd_card](examples/sd_card) | Mounts the microSD in 4-bit SDMMC mode, lists files, reads and writes | yes |
-| [camera_ethernet_stream](examples/camera_ethernet_stream) | [OV2640](https://aliexpress.com/item/1005007015642403.html) MJPEG stream over Ethernet | no |
+| [camera_ethernet_stream](examples/camera_ethernet_stream) | [OV2640](https://aliexpress.com/item/1005007015642403.html) MJPEG stream over Ethernet | yes |
 | [usb_keyboard](examples/usb_keyboard) | USB keyboard on the USB-A port, keys printed on the CH340K port. Needs other settings, [see here](docs/hardware.md#using-the-usb-a-port-as-usb-host). | yes |
 
 All examples compile with Arduino-ESP32 3.3.x. Run [`scripts/build-examples.sh`](scripts/build-examples.sh)
