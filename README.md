@@ -103,6 +103,10 @@ The full pinout, header layout and copy-paste `#define`s are in [docs/pinout.md]
 | [camera_ethernet_stream](examples/camera_ethernet_stream) | [OV2640](https://aliexpress.com/item/1005007015642403.html) MJPEG stream over Ethernet | yes |
 | [usb_keyboard](examples/usb_keyboard) | USB keyboard on the USB-A port, keys printed on the CH340K port. Needs other settings, [see here](docs/hardware.md#using-the-usb-a-port-as-usb-host). | yes |
 
+<p align="center">
+  <img src="docs/images/board-camera.jpeg" alt="The board with an OV2640 camera module, antenna and PoE Ethernet cable connected" width="60%">
+</p>
+
 All examples compile with Arduino-ESP32 3.3.x. Run [`scripts/build-examples.sh`](scripts/build-examples.sh)
 to build them all.
 
